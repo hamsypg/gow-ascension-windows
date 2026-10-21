@@ -12,8 +12,18 @@ WINDOWS = sys.platform == 'win32'
 MAC = sys.platform == 'darwin'
 SHOT = '--shot' in sys.argv     # development: screenshot each page, then quit (no music)
 
-HERE = Path(__file__).resolve().parent.parent          # launcher/
-ROOT = HERE.parent                                   # ascension/
+FROZEN = bool(getattr(sys, 'frozen', False))    # packaged with PyInstaller (packaging/windows)
+if FROZEN:
+    # The .exe runs from a temp extraction folder (sys._MEIPASS), not from
+    # beside the repository, so __file__ cannot find launcher/ or ascension/
+    # from there. AscensionLauncher.exe itself is meant to sit at the
+    # repository's root, next to build/, mods/, docs/ and launcher/ (which
+    # keeps its lang/*.json, fonts and assets/ as loose files either way).
+    ROOT = Path(sys.executable).resolve().parent        # ascension/
+    HERE = ROOT / 'launcher'
+else:
+    HERE = Path(__file__).resolve().parent.parent          # launcher/
+    ROOT = HERE.parent                                   # ascension/
 WORK = ROOT.parent / 'work'
 ASSET_DIRS = [HERE / 'assets', WORK / 'data' / 'launcher']
 if WINDOWS:

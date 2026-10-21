@@ -12,6 +12,12 @@
 /build/
 /release/
 __pycache__/
+
+# AscensionLauncher.exe (scripts/windows/build-launcher-exe.ps1) and its venv.
+/AscensionLauncher.exe
+/launcher/.launcher-build-venv/
+/packaging/windows/build/
+/packaging/windows/dist/
 recomp_spu_ls.bin
 scratch/
 

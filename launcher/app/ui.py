@@ -9,7 +9,7 @@ import time
 import webbrowser
 from pathlib import Path
 from .config import (ANISO_LEVELS, APP_NAME, ASPECTS, CONTROL_GROUPS, DEADZONES, DEFAULTS, DISPLAY_MODES,
-    ENTER_BUTTONS, HERE, KEY_PRESETS, MAC, ON_OFF, PAD_BUTTONS, PAD_CONTROLS, PAD_DEFAULTS, RENDERERS,
+    ENTER_BUTTONS, FROZEN, HERE, KEY_PRESETS, MAC, ON_OFF, PAD_BUTTONS, PAD_CONTROLS, PAD_DEFAULTS, RENDERERS,
     RENDER_SCALES, ROOT, SCALE_FILTERS, SHOT, TK_KEYS, VERSION, VSYNC_MODES, WINDOWS, WINDOW_SIZES, asset,
     key_label, load_settings, save_settings)
 from .discord_presence import Presence
@@ -956,7 +956,10 @@ class Launcher:
         self.save()
         self.music.close()
         release_disc(self.mounted)
-        subprocess.Popen([sys.executable] + sys.argv, cwd=os.getcwd())
+        # Frozen (packaging/windows/AscensionLauncher.exe): sys.argv already
+        # starts with the exe's own path. Running from source: it is the
+        # script's argv, which needs the interpreter in front of it.
+        subprocess.Popen(sys.argv if FROZEN else [sys.executable] + sys.argv, cwd=os.getcwd())
         self.root.destroy()
 
     def build_about(self):

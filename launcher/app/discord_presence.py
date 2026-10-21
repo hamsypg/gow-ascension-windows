@@ -156,7 +156,10 @@ class Presence:
     or no Discord client running: the thread quietly gives up."""
 
     def __init__(self, client_id=None):
-        self.client_id = client_id or CLIENT_ID
+        # None means "use the module default"; '' (or any other falsy value
+        # passed explicitly) means "stay disabled regardless of CLIENT_ID" --
+        # distinct cases now that CLIENT_ID is normally set.
+        self.client_id = CLIENT_ID if client_id is None else client_id
         self._stop = threading.Event()
         self._thread = None
         self._started_at = None

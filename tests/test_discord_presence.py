@@ -132,6 +132,14 @@ class TestDiscordPresence(unittest.TestCase):
         self.assertIsNone(presence._thread)
         presence.stop()  # must not raise with nothing running
 
+    def test_default_constructor_uses_the_module_client_id(self):
+        # Presence() with no argument must pick up CLIENT_ID, not stay
+        # disabled -- this is what the "Discord Rich Presence" toggle
+        # actually constructs in launcher/app/ui.py.
+        self.assertTrue(dp.CLIENT_ID, 'CLIENT_ID is empty: the toggle in Advanced would be a silent no-op')
+        presence = dp.Presence()
+        self.assertEqual(presence.client_id, dp.CLIENT_ID)
+
 
 if __name__ == '__main__':
     unittest.main()

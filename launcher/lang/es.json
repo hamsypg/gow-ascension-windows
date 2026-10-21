@@ -147,6 +147,8 @@
   "Disc image (.iso)": "Imagen del disco (.iso)",
   "Mounted read-only at the disc folder when playing.": "Se monta como solo lectura en la carpeta del disco al jugar.",
   "Background music": "Música de fondo",
+  "Discord Rich Presence": "Discord Rich Presence",
+  "Shows only the game name and how long you have played on your Discord profile.": "Muestra en tu perfil de Discord solo el nombre del juego y el tiempo jugado.",
   "Launcher language": "Idioma del launcher",
   "Automatic (the system's)": "Automático (el del sistema)",
   "The launcher's own text only; the game's language is under Game.": "Solo los textos del launcher; el idioma del juego está en Juego.",
@@ -161,7 +163,7 @@
 
   "The project": "El proyecto",
   "God of War: Ascension (PS3) recompiled to run natively on a PC. The game's PowerPC code is translated to C and compiled for x86-64; the SPU code is recompiled too, and what the PS3's system did (RSX video, audio, files, SPURS) is reimplemented by the ps3recomp runtime. It is not an emulator and carries nothing from the game: you need your own disc.": "God of War: Ascension (PS3) recompilado para ejecutarse de forma nativa en PC. El código PowerPC del juego se traduce a C y se compila para x86-64; el código de los SPU también se recompila, y lo que hacía el sistema de la PS3 (vídeo RSX, audio, archivos, SPURS) lo reimplementa el runtime de ps3recomp. No es un emulador y no trae nada del juego: necesitas tu propio disco.",
-  "Status: experiment. The game goes from boot to the first level, but still slowly (menu at ~28 fps, first level at ~9 fps). See the progress in the repository.": "Estado: experimento. El juego va del arranque al primer nivel, pero todavía lento (menú a ~28 fps, primer nivel a ~9 fps). Mira el avance en el repositorio.",
+  "Status: experiment. The game goes from boot to the first level, but still slowly (main menu at ~30 fps, first level at ~16-17 fps). See the progress in the repository.": "Estado: experimento. El juego va del arranque al primer nivel, pero todavía lento (menú principal a ~30 fps, primer nivel a ~16-17 fps). Mira el avance en el repositorio.",
   "Links": "Enlaces",
   "This project": "Este proyecto",
   "Milestones": "Hitos",

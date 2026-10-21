@@ -25,6 +25,8 @@ Pages: Home (cross-fading artwork, quick settings), Video, Controls, Game, Mods,
 | Mods | `PS3_MODS` (enabled folders, first wins; each mirrors `USRDIR`) |
 | Icon | `PS3_WINDOW_ICON` (`icon-2.png` as an `.ico`; the `.png` on macOS) |
 
+Discord Rich Presence (Advanced → Launcher, off by default) is launcher-only, not an environment switch: while the game runs, the launcher shows its name and how long it has been running on the player's Discord profile, nothing else, by talking to the local Discord client's IPC pipe directly (`app/discord_presence.py`, no extra package). It needs a Discord application id in `CLIENT_ID` at the top of that file (one at <https://discord.com/developers/applications>, free); until one is set the toggle does nothing.
+
 Mods come from two places, listed together in one priority order (first wins): `mods-builtin/` in this repository (shown as included) and the user's mods folder. A mod is a folder that mirrors `USRDIR` (its files replace the disc's), and/or a `mod.json`:
 
 ```json

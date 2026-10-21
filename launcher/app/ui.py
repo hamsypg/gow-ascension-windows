@@ -12,6 +12,7 @@ from .config import (ANISO_LEVELS, APP_NAME, ASPECTS, CONTROL_GROUPS, DEADZONES,
     ENTER_BUTTONS, HERE, KEY_PRESETS, MAC, ON_OFF, PAD_BUTTONS, PAD_CONTROLS, PAD_DEFAULTS, RENDERERS,
     RENDER_SCALES, ROOT, SCALE_FILTERS, SHOT, TK_KEYS, VERSION, VSYNC_MODES, WINDOWS, WINDOW_SIZES, asset,
     key_label, load_settings, save_settings)
+from .discord_presence import Presence
 from .game import (all_mods, backup_list, disc_problem, icon_file, language_options, missing,
     prebuild_mods, prepare_game, release_disc, restore_saves, save_dir, start_game)
 from .i18n import available, set_language, tr
@@ -59,6 +60,7 @@ class Launcher:
         self.process = None
         self.preparing = False
         self.mounted = None        # the disc folder the launcher mounted (macOS)
+        self.discord = Presence()  # Discord Rich Presence, started only while playing
         if MAC:   # Tk on macOS counts 72 points to the inch: the sizes below assume Windows' 96
             root.tk.call('tk', 'scaling', 1.33)
         self.heading = 'Georgia'
@@ -921,6 +923,8 @@ class Launcher:
                           hint=tr('Mounted read-only at the disc folder when playing.'))
         self.section(f, tr('Launcher'))
         self.row(f, tr('Background music'), self.choice(f, 'music', ON_OFF))
+        self.row(f, tr('Discord Rich Presence'), self.choice(f, 'discord_rpc', ON_OFF),
+                 tr('Shows only the game name and how long you have played on your Discord profile.'))
         self.row(f, tr('Launcher language'), self.choice(f, 'ui_language', [('auto', "Automatic (the system's)")] + available()),
                  tr("The launcher's own text only; the game's language is under Game."))
         self.var('ui_language').trace_add('write', lambda *_: self.root.after_idle(self.language_changed))
@@ -964,7 +968,7 @@ class Launcher:
                         'the ps3recomp runtime. It is not an emulator and carries nothing from the game: '
                         'you need your own disc.'))
         self.note(f, tr('Status: experiment. The game goes from boot to the first level, but still slowly '
-                        '(menu at ~28 fps, first level at ~9 fps). See the progress in the repository.'))
+                        '(main menu at ~30 fps, first level at ~16-17 fps). See the progress in the repository.'))
         self.section(f, tr('Links'))
         for title, url in ((tr('This project'), 'https://github.com/arnaldolima1/gow-ascension-pc'),
                            (tr('Milestones'), 'https://github.com/arnaldolima1/gow-ascension-pc/blob/main/docs/MILESTONES.md'),
@@ -1100,6 +1104,8 @@ class Launcher:
             return
         self.preparing = False
         self.music.pause()
+        if self.s.get('discord_rpc') == '1':
+            self.discord.start()
         self.refresh_backups()
         self.refresh_status(tr('Game running…'))
         threading.Thread(target=self.wait_game, daemon=True).start()
@@ -1168,6 +1174,7 @@ class Launcher:
             pass
 
     def game_ended(self, code):
+        self.discord.stop()
         self.log.close()
         self.process = None
         self.play_button.configure(state='normal')
@@ -1186,6 +1193,7 @@ class Launcher:
         if self.process:
             if not self.messagebox.askyesno(APP_NAME, tr('Close the game?')):
                 return
+            self.discord.stop()
             self.process.terminate()
             try:
                 self.process.wait(5)

@@ -142,7 +142,7 @@ DEFAULTS = {
     'mods_dir': str(ROOT / 'mods'), 'mods_enabled': [], 'mods_order': [],
     'game_exe': str(GAME_EXE), 'eboot': str(EBOOT),
     'disc_dir': '' if WINDOWS else str(WORK / 'disc'), 'disc_iso': '',
-    'backup_saves': '1', 'music': '1', 'extra_env': '', 'ui_language': 'auto',
+    'backup_saves': '1', 'music': '1', 'discord_rpc': '0', 'extra_env': '', 'ui_language': 'auto',
 }
 
 

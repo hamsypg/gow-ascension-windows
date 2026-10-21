@@ -26,8 +26,20 @@ if (-not (Test-Path $Venv)) {
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 }
 $Py = Join-Path $Venv "Scripts\python.exe"
-& $Py -m pip install --quiet --upgrade pip pyinstaller pillow
-if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+# Installing straight into the fresh venv's own pip, instead of having it
+# upgrade itself first: that self-replace is what breaks on some Windows
+# setups (antivirus or OneDrive locking a file mid-write leaves a pip that
+# imports partway and fails with "No module named 'pip._vendor'" or similar).
+& $Py -m pip install --quiet pyinstaller pillow
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "pip looked broken in this venv; repairing it and trying again…"
+    & $Py -m ensurepip --upgrade | Out-Null
+    & $Py -m pip install --quiet pyinstaller pillow
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Still broken. Delete $Venv and run this script again for a clean venv."
+        exit $LASTEXITCODE
+    }
+}
 
 Write-Host "Building AscensionLauncher.exe…"
 & $Py -m PyInstaller $Spec --noconfirm --distpath $DistDir --workpath $BuildDir

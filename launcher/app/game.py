@@ -16,11 +16,20 @@ def save_dir():
     return ROOT / 'gamedata' / 'dev_hdd0' / 'home' / '00000001' / 'savedata'
 
 
+DEFAULT_ICON_ICO = ROOT / 'packaging' / 'windows' / 'ascension.ico'
+DEFAULT_ICON_PNG = ROOT / 'packaging' / 'icon.png'
+
+
 def icon_file():
     """icon-2.png as an .ico (window, taskbar and the game's window); on
-    macOS the .png itself (the game's Dock icon)."""
+    macOS the .png itself (the game's Dock icon). Without that optional
+    artwork, falls back to Ascension's own emblem under packaging/ (already
+    built as an .ico there) instead of leaving Tk's default feather icon."""
     src = asset('icon-2.png')
-    if not src or not WINDOWS:
+    if not src:
+        default = DEFAULT_ICON_ICO if WINDOWS else DEFAULT_ICON_PNG
+        return default if default.is_file() else None
+    if not WINDOWS:
         return src
     ico = CONFIG_DIR / 'icon.ico'
     try:

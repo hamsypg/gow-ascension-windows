@@ -22,7 +22,7 @@ WINDOWS = sys.platform == 'win32'
 
 # Ascension's own Discord application id (Discord Developer Portal). Empty
 # until one is registered: Presence.start() is then a silent no-op.
-CLIENT_ID = ''
+CLIENT_ID = '1562578669841682582'
 
 OP_HANDSHAKE, OP_FRAME, OP_CLOSE, OP_PING, OP_PONG = range(5)
 FRAME_HEADER = struct.Struct('<II')      # opcode, body length
